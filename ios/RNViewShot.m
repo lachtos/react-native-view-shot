@@ -69,6 +69,7 @@ RCT_EXPORT_METHOD(captureRef:(nonnull NSNumber *)target
     NSString *result = [RCTConvert NSString:options[@"result"]];
     BOOL renderInContext = [RCTConvert BOOL:options[@"useRenderInContext"]];
     BOOL snapshotContentContainer = [RCTConvert BOOL:options[@"snapshotContentContainer"]];
+    BOOL overlay = [RCTConvert BOOL:options[@"overlay"]];
 
     // Capture image
     BOOL success;
@@ -94,7 +95,7 @@ RCT_EXPORT_METHOD(captureRef:(nonnull NSNumber *)target
     if (size.width < 0.1 || size.height < 0.1) {
       reject(RCTErrorUnspecified, [NSString stringWithFormat:@"The content size must not be zero or negative. Got: (%g, %g)", size.width, size.height], nil);
       return;
-    }
+    } 
 
     CGPoint savedContentOffset;
     CGRect savedFrame;
@@ -112,11 +113,32 @@ RCT_EXPORT_METHOD(captureRef:(nonnull NSNumber *)target
       // this comes with some trade-offs such as inability to capture gradients or scrollview's content in full but it works for large views
       [rendered.layer renderInContext: UIGraphicsGetCurrentContext()];
       success = YES;
-    }
-    else {
+    } else {
       // this doesn't work for large views and reports incorrect success even though the image is blank
       success = [rendered drawViewHierarchyInRect:(CGRect){CGPointZero, size} afterScreenUpdates:YES];
     }
+    
+    // modifications for overlay
+    if (overlay) {
+      UIImage *overlayImage = [UIImage imageNamed:@"share_overlay.png"];
+      
+      // get context
+      CGContextRef context = UIGraphicsGetCurrentContext();
+      
+      // push context to make it current
+      // (need to do this manually because we are not drawing in a UIView)
+      UIGraphicsPushContext(context);
+      
+      // drawing code comes here- look at CGContext reference
+      // for available operations
+      // this example draws the inputImage into the context
+      [overlayImage drawInRect:CGRectMake(0, 0, size.width, size.height)];
+      
+      // pop context
+      UIGraphicsPopContext();
+    }
+    // end of modifications for overlay
+
     UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
 

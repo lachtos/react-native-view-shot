@@ -44,6 +44,10 @@ declare module 'react-native-view-shot' {
          * container height.
          */
         snapshotContentContainer?: boolean;
+        /**
+         * if true the overlay will be added
+         */
+         overlay?: boolean;
     }
 
     export interface ViewShotProperties {

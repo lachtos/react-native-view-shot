@@ -85,6 +85,7 @@ public class RNViewShotModule extends ReactContextBaseJavaModule {
         final Integer scaleHeight = options.hasKey("height") ? (int) (dm.density * options.getDouble("height")) : null;
         final String resultStreamFormat = options.getString("result");
         final Boolean snapshotContentContainer = options.getBoolean("snapshotContentContainer");
+        final Boolean overlay = options.getBoolean("overlay");
 
         try {
             File outputFile = null;
@@ -98,7 +99,7 @@ public class RNViewShotModule extends ReactContextBaseJavaModule {
             uiManager.addUIBlock(new ViewShot(
                     tag, extension, imageFormat, quality,
                     scaleWidth, scaleHeight, outputFile, resultStreamFormat,
-                    snapshotContentContainer, reactContext, activity, promise)
+                    snapshotContentContainer, overlay, reactContext, activity, promise)
             );
         } catch (final Throwable ex) {
             Log.e(RNVIEW_SHOT, "Failed to snapshot view tag " + tag, ex);

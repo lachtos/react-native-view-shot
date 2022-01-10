@@ -13,7 +13,8 @@ type Options = {
   format: "png" | "jpg" | "webm" | "raw",
   quality: number,
   result: "tmpfile" | "base64" | "data-uri" | "zip-base64",
-  snapshotContentContainer: boolean
+  snapshotContentContainer: boolean,
+  overlay: boolean
 };
 
 if (!RNViewShot) {
@@ -34,7 +35,8 @@ const defaultOptions = {
   format: "png",
   quality: 1,
   result: "tmpfile",
-  snapshotContentContainer: false
+  snapshotContentContainer: false,
+  overlay: false
 };
 
 // validate and coerce options

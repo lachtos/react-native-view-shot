@@ -2,6 +2,7 @@ package fr.greweb.reactnativeviewshot;
 
 import android.app.Activity;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
@@ -125,6 +126,7 @@ public class ViewShot implements UIBlock {
     private final String result;
     private final Promise promise;
     private final Boolean snapshotContentContainer;
+    private final Boolean overlay;
     @SuppressWarnings({"unused", "FieldCanBeLocal"})
     private final ReactApplicationContext reactContext;
     private final Activity currentActivity;
@@ -142,6 +144,7 @@ public class ViewShot implements UIBlock {
             final File output,
             @Results final String result,
             final Boolean snapshotContentContainer,
+            final Boolean overlay,
             final ReactApplicationContext reactContext,
             final Activity currentActivity,
             final Promise promise) {
@@ -154,6 +157,7 @@ public class ViewShot implements UIBlock {
         this.output = output;
         this.result = result;
         this.snapshotContentContainer = snapshotContentContainer;
+        this.overlay = overlay;
         this.reactContext = reactContext;
         this.currentActivity = currentActivity;
         this.promise = promise;
@@ -332,6 +336,10 @@ public class ViewShot implements UIBlock {
             }
         }
 
+        if (height != null) {
+            h = height;
+        }
+
         final Point resolution = new Point(w, h);
         Bitmap bitmap = getBitmapForScreenshot(w, h);
 
@@ -371,6 +379,13 @@ public class ViewShot implements UIBlock {
 
             c.restoreToCount(countCanvasSave);
             recycleBitmap(childBitmapBuffer);
+        }
+
+        if (overlay) {
+            Bitmap bitmapBuffer = BitmapFactory.decodeResource(reactContext.getResources(), R.drawable.share_overlay);
+            bitmapBuffer = Bitmap.createScaledBitmap(bitmapBuffer, w, h, true);
+            c.drawBitmap(bitmapBuffer, 0, 0, paint);
+            recycleBitmap(bitmapBuffer);
         }
 
         if (width != null && height != null && (width != w || height != h)) {
