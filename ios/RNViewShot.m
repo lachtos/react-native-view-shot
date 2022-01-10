@@ -115,12 +115,12 @@ RCT_EXPORT_METHOD(captureRef:(nonnull NSNumber *)target
       success = YES;
     } else {
       // this doesn't work for large views and reports incorrect success even though the image is blank
-      success = [rendered drawViewHierarchyInRect:(CGRect){CGPointZero, size} afterScreenUpdates:YES];
+      success = [rendered drawViewHierarchyInRect:(CGRect){CGPointZero, overlay ? view.bounds.size : size} afterScreenUpdates:YES];
     }
     
     // modifications for overlay
     if (overlay) {
-      UIImage *overlayImage = [UIImage imageNamed:@"share_overlay.png"];
+      UIImage *overlayImage = [UIImage imageNamed:@"overlay.png"];
       
       // get context
       CGContextRef context = UIGraphicsGetCurrentContext();

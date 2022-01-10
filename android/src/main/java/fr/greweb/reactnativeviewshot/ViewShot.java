@@ -382,7 +382,7 @@ public class ViewShot implements UIBlock {
         }
 
         if (overlay) {
-            Bitmap bitmapBuffer = BitmapFactory.decodeResource(reactContext.getResources(), R.drawable.share_overlay);
+            Bitmap bitmapBuffer = BitmapFactory.decodeResource(reactContext.getResources(), R.drawable.overlay);
             bitmapBuffer = Bitmap.createScaledBitmap(bitmapBuffer, w, h, true);
             c.drawBitmap(bitmapBuffer, 0, 0, paint);
             recycleBitmap(bitmapBuffer);
